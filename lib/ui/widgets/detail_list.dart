@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:movie/ui/provider/product_provider.dart';
-import 'package:movie/ui/screens/main_screen.dart';
+import 'package:uts_toko/ui/provider/product_provider.dart';
+import 'package:uts_toko/ui/screens/main_screen.dart';
 
 class DetailList extends StatelessWidget {
   final String imagePath;

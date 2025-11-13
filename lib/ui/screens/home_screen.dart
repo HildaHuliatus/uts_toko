@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movie/ui/widgets/minuman_list.dart';
-import 'package:movie/ui/widgets/makanan_list.dart';
+import 'package:uts_toko/ui/widgets/minuman_list.dart';
+import 'package:uts_toko/ui/widgets/makanan_list.dart';
 // import 'package:movie/ui/widgets/baju_list.dart';
 
 class HomeScreen extends StatefulWidget {

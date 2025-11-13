@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:movie/ui/screens/pesanan.dart';
-import 'package:movie/ui/screens/profile.dart';
-import 'package:movie/ui/screens/home_screen.dart';
-import 'package:movie/ui/provider/product_provider.dart';
+import 'package:uts_toko/ui/screens/pesanan.dart';
+import 'package:uts_toko/ui/screens/profile.dart';
+import 'package:uts_toko/ui/screens/home_screen.dart';
+import 'package:uts_toko/ui/provider/product_provider.dart';
 
 class MainScreen extends StatefulWidget {
   final int initialIndex;

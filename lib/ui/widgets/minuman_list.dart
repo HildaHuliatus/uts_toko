@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:movie/ui/provider/product_provider.dart';
-import 'package:movie/ui/widgets/detail_list.dart';
-//import 'package:movie/ui/screens/pesanan.dart'; 
+import 'package:uts_toko/ui/provider/product_provider.dart';
+import 'package:uts_toko/ui/widgets/detail_list.dart';
+//import 'package:uts_toko/ui/screens/pesanan.dart'; 
 
 class MinumanList extends StatelessWidget {
   const MinumanList({super.key});
