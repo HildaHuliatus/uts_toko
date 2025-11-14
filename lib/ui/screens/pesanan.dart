@@ -9,6 +9,8 @@ class PesananScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ProductProvider>();
+    TextEditingController catatanController = TextEditingController();
+
 
     // 🔹 Gabungkan pesanan makanan dan minuman
     final allOrders = [
@@ -182,6 +184,24 @@ class PesananScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+
+                      const SizedBox(height: 12),
+
+                      // 🔹 Tambahkan Catatan Pesanan
+                      TextField(
+                        controller: catatanController,
+                        maxLines: 2,
+                        decoration: InputDecoration(
+                          hintText: "Tambah catatan (opsional)...",
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          contentPadding: const EdgeInsets.all(8),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: Colors.black12),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,17 +209,7 @@ class PesananScreen extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                provider.clearOrders();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text("Semua pesanan berhasil dibatalkan")),
-                                );
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const MainScreen()),
-                                );
+                                _showCancelConfirmation(context);
                               },
                               icon: const Icon(Icons.delete_outline),
                               label: const Text("Batal Pesanan"),
@@ -219,7 +229,7 @@ class PesananScreen extends StatelessWidget {
                                     context, totalHargaSemua);
                               },
                               icon: const Icon(Icons.payment_outlined),
-                              label: const Text("Bayar Sekarang"),
+                              label: const Text("Pesan Sekarang"),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     const Color.fromARGB(255, 106, 203, 84),
@@ -237,6 +247,50 @@ class PesananScreen extends StatelessWidget {
             ),
     );
   }
+
+  void _showCancelConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Konfirmasi",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          "Apakah Anda yakin ingin membatalkan semua pesanan?",
+          style: TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Tidak"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 230, 83, 83),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<ProductProvider>().clearOrders();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Semua pesanan berhasil dibatalkan"),
+                ),
+              );
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const MainScreen()),
+              );
+            },
+            child: const Text("Ya, Batalkan"),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   // 🔹 Dialog pilih metode pembayaran
   void _showMetodePembayaranDialog(BuildContext context, int totalPembayaran) {
@@ -346,6 +400,7 @@ class PesananScreen extends StatelessWidget {
       ),
     );
   }
+  
 
   // 🔹 Format angka ke format rupiah
   String _formatRupiah(int number) {

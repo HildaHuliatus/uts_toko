@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),  
 
-              Container(
+              SizedBox(
                 height: 80,
                 child: LayoutBuilder(
                   builder: (context, constraints) {

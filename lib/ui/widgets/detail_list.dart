@@ -19,6 +19,35 @@ class DetailList extends StatelessWidget {
     required this.category,
   });
 
+  List<Map<String, dynamic>> _getInfoByCategory(String category) {
+    switch (category) {
+      case "makanan":
+        return [
+          {"icon": Icons.restaurant_menu, "label": "Porsi Besar"},
+          {"icon": Icons.local_fire_department, "label": "Hangat"},
+          {"icon": Icons.timer, "label": "Fresh Cooked"},
+        ];
+
+      case "minuman":
+        return [
+          {"icon": Icons.local_drink, "label": "500ml"},
+          {"icon": Icons.ac_unit, "label": "Less Ice"},
+          {"icon": Icons.spa, "label": "Sugar"},
+        ];
+
+      case "dessert":
+        return [
+          {"icon": Icons.cake, "label": "Manis"},
+          {"icon": Icons.icecream, "label": "Dingin"},
+          {"icon": Icons.favorite, "label": "Best Seller"},
+        ];
+
+      default:
+        return [];
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ProductProvider>(context);
@@ -112,15 +141,15 @@ class DetailList extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
 
-                            // Info tambahan
+                            // 🔹 Info tambahan sesuai kategori
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                _buildFeature(Icons.local_drink, "500ml"),
-                                _buildFeature(Icons.ac_unit, "Less ice"),
-                                _buildFeature(Icons.spa, "Sugar"),
+                                for (var item in _getInfoByCategory(category))
+                                  _buildFeature(item["icon"], item["label"]),
                               ],
                             ),
+
                             const SizedBox(height: 30),
 
                             // 🔹 Kontrol Quantity
@@ -221,7 +250,7 @@ class DetailList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         child: Image.asset(
                           imagePath,
-                          width: 200,
+                          width: 250,
                           height: 250,
                           fit: BoxFit.cover,
                         ),
