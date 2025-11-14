@@ -28,10 +28,29 @@ class PembayaranScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pembayaran"),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        title: const Text(
+          "Pembayaran",
+          style: TextStyle(
+            fontWeight: FontWeight.w700, // lebih bold
+            fontSize: 22,                // ukuran lebih besar
+            color: Colors.white,         // kontras dengan hijau
+            letterSpacing: 1,            // spasi antar huruf sedikit
+            shadows: [
+              Shadow(
+                color: Colors.black26,   // tipis, agar ada efek depth
+                offset: Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
+          ),
+        ),
+        centerTitle: true,              
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.green, // lebih elegan
+        elevation: 4, // shadow bawah AppBar
       ),
+
+
       body: pesanan.isEmpty
           ? const Center(
               child: Text(
@@ -86,7 +105,7 @@ class PembayaranScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "Rp $totalHarga",
+                          "Rp ${_formatRupiah(totalHarga)}",
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -105,19 +124,7 @@ class PembayaranScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         _showMetodePembayaranDialog(context, totalHarga);
-                        //provider.clearRiwayatPembayaran();
-
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   const SnackBar(
-                        //     content: Text("Pembayaran berhasil!"),
-                        //     backgroundColor: Colors.green,
-                        //   ),
-                        // );
-
-                        // Navigator.pushReplacement(
-                        //   context,
-                        //   MaterialPageRoute(builder: (_) => const SuccessPaymentScreen()),
-                        // );
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,

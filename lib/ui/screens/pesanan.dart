@@ -265,7 +265,7 @@ class PesananScreen extends StatelessWidget {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 230, 83, 83),
+              backgroundColor: Colors.green,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -308,7 +308,7 @@ class PesananScreen extends StatelessWidget {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 230, 83, 83),
+              backgroundColor: Colors.green,
             ),
             onPressed: () {
               final provider = context.read<ProductProvider>();
@@ -335,7 +335,7 @@ class PesananScreen extends StatelessWidget {
                                   );
             },
 
-            child: const Text("Ya, Batalkan"),
+            child: const Text("Ya"),
           ),
         ],
       ),

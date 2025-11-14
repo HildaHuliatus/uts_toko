@@ -93,7 +93,7 @@ class StrukPembayaranScreen extends StatelessWidget {
                       TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Rp $total",
+                  "Rp ${_formatRupiah(total)}",
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -133,5 +133,22 @@ class StrukPembayaranScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // 🔹 Format angka ke format rupiah
+  String _formatRupiah(int number) {
+    String numStr = number.toString();
+    String result = '';
+    int count = 0;
+
+    for (int i = numStr.length - 1; i >= 0; i--) {
+      result = numStr[i] + result;
+      count++;
+      if (count == 3 && i != 0) {
+        result = '.$result';
+        count = 0;
+      }
+    }
+    return result;
   }
 }
