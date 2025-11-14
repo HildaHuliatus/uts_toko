@@ -374,4 +374,43 @@ final List<Map<String, dynamic>> _dessert = [
   List<Map<String, dynamic>> get orderedDessert =>
       _dessert.where((p) => p["quantity"] > 0).toList();
 
+  List<Map<String, dynamic>> riwayatPembayaran = [];
+
+  void tambahRiwayatPembayaran(List<Map<String, dynamic>> pesananBaru) {
+    for (var itemBaru in pesananBaru) {
+
+      // Convert price string → int
+      final harga = int.parse(
+        itemBaru["price"]
+            .toString()
+            .replaceAll("Rp.", "")
+            .replaceAll(".", "")
+            .trim(),
+      );
+
+      final index = riwayatPembayaran.indexWhere(
+        (item) => item['name'] == itemBaru['name'],
+      );
+
+      if (index != -1) {
+        // Jika sudah ada → tambah quantity
+        riwayatPembayaran[index]['quantity'] += itemBaru['quantity'];
+      } else {
+        // Jika baru → simpan price sebagai INT
+        riwayatPembayaran.add({
+          ...itemBaru,
+          "price": harga, // <-- SIMPAN SEBAGAI ANGKA
+        });
+      }
+    }
+    notifyListeners();
+  }
+
+
+  void clearRiwayatPembayaran() {
+    riwayatPembayaran.clear();
+    notifyListeners();
+  }
+
+
 }

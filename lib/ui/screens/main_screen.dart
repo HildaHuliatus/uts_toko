@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uts_toko/ui/screens/pesanan.dart';
-import 'package:uts_toko/ui/screens/profile.dart';
+import 'package:uts_toko/ui/screens/pembayaran.dart';
 import 'package:uts_toko/ui/screens/home_screen.dart';
 import 'package:uts_toko/ui/provider/product_provider.dart';
 
@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   static const List<Widget> _screens = [
     HomeScreen(),
     PesananScreen(),
-    ProfileScreen(),
+    PembayaranScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -105,8 +105,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
 
           const BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.payment),
+            label: 'Pembayaran',
           ),
         ],
         backgroundColor: Colors.green,

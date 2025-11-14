@@ -35,7 +35,7 @@ class PesananScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Pesanan Saya",
+          "Pesanan",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Poppins',
@@ -225,18 +225,16 @@ class PesananScreen extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                _showMetodePembayaranDialog(
-                                    context, totalHargaSemua);
+                                _showPesanConfirmation(context);
                               },
                               icon: const Icon(Icons.payment_outlined),
                               label: const Text("Pesan Sekarang"),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 106, 203, 84),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 14),
+                                backgroundColor: const Color.fromARGB(255, 106, 203, 84),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
                               ),
                             ),
+
                           ),
                         ],
                       ),
@@ -291,116 +289,58 @@ class PesananScreen extends StatelessWidget {
     );
   }
 
-
-  // 🔹 Dialog pilih metode pembayaran
-  void _showMetodePembayaranDialog(BuildContext context, int totalPembayaran) {
-    String selectedMethod = "Cash"; // default cash
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return AlertDialog(
-            title: const Text(
-              "Pilih Metode Pembayaran",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var method in [
-                  "Cash",
-                  "QRIS",
-                  "Transfer Bank",
-                  "Kartu Debit/Kredit"
-                ])
-                  RadioListTile<String>(
-                    title: Text(method),
-                    value: method,
-                    // ignore: deprecated_member_use
-                    groupValue: selectedMethod,
-                    // ignore: deprecated_member_use
-                    onChanged: (value) {
-                      setState(() => selectedMethod = value!);
-                    },
-                  ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                child: const Text("Batal"),
-                onPressed: () => Navigator.pop(context),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color.fromARGB(255, 106, 203, 84)),
-                onPressed: () {
-                  Navigator.pop(context);
-                  _showPaymentConfirmationDialog(
-                      context, selectedMethod, totalPembayaran);
-                },
-                child: const Text("Lanjut"),
-              ),
-            ],
-          );
-        });
-      },
-    );
-  }
-
-  // 🔹 Dialog konfirmasi pembayaran
-  void _showPaymentConfirmationDialog(
-      BuildContext context, String metode, int totalPembayaran) {
+  void _showPesanConfirmation(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text(
-          "Konfirmasi Pembayaran",
+          "Konfirmasi",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        content: RichText(
-          text: TextSpan(
-            style: const TextStyle(color: Colors.black87, fontSize: 16),
-            children: [
-              const TextSpan(text: "Anda akan membayar sebesar "),
-              TextSpan(
-                text: "Rp. ${_formatRupiah(totalPembayaran)}",
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(text: " menggunakan metode $metode."),
-            ],
-          ),
+        content: const Text(
+          "Apakah pesanan anda sudah sesuai?",
+          style: TextStyle(fontSize: 16),
         ),
         actions: [
           TextButton(
-            child: const Text("Batal"),
             onPressed: () => Navigator.pop(context),
+            child: const Text("Tidak"),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    const Color.fromARGB(255, 106, 203, 84)),
+              backgroundColor: Color.fromARGB(255, 230, 83, 83),
+            ),
             onPressed: () {
-              Navigator.pop(context);
+              final provider = context.read<ProductProvider>();
+
+              final semuaPesanan = [
+                ...provider.orderedMakanan,
+                ...provider.orderedMinuman,
+                ...provider.orderedDessert
+              ];
+              provider.tambahRiwayatPembayaran(semuaPesanan);
+
+              provider.clearOrders();
+
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text(
-                        "Pembayaran berhasil menggunakan $metode. Terima kasih!")),
+                const SnackBar(content: Text("Semua pesanan sudah dipesankan.")),
               );
-              context.read<ProductProvider>().clearOrders();
+
               Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const MainScreen()),
-              );
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MainScreen(initialIndex: 2),
+                                    ),
+                                  );
             },
-            child: const Text("Bayar"),
+
+            child: const Text("Ya, Batalkan"),
           ),
         ],
       ),
     );
   }
-  
 
   // 🔹 Format angka ke format rupiah
   String _formatRupiah(int number) {
