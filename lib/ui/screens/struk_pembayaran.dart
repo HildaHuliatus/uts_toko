@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:uts_toko/ui/provider/product_provider.dart';
 import 'package:uts_toko/ui/screens/main_screen.dart';
 
 class StrukPembayaranScreen extends StatelessWidget {
@@ -107,6 +109,8 @@ class StrukPembayaranScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  final provider = context.read<ProductProvider>();
+                  provider.clearRiwayatPembayaran();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
