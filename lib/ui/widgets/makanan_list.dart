@@ -5,12 +5,19 @@ import 'package:uts_toko/ui/widgets/detail_list.dart';
 //import 'package:movie/ui/screens/pesanan.dart'; 
 
 class MakananList extends StatelessWidget {
-  const MakananList({super.key});
+  final String keyword;
+  const MakananList({super.key, required this.keyword});
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ProductProvider>();
     final products = provider.makanan;
+
+    // FILTER LIST
+    final filtered = products.where((item) {
+      return item["name"].toLowerCase().contains(keyword) ||
+          item["deskripsi"].toLowerCase().contains(keyword);
+    }).toList();
 
     return SingleChildScrollView(
       child: Column(
@@ -21,12 +28,12 @@ class MakananList extends StatelessWidget {
             color: Colors.white,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: products.length,
+              itemCount: filtered.length,
               separatorBuilder: (context, index) => const SizedBox(width: 10),
               itemBuilder: (context, index) => Padding(
                 padding: EdgeInsets.only(
                   left: index == 0 ? 10 : 0,
-                  right: index == products.length - 1 ? 10 : 0,
+                  right: index == filtered.length - 1 ? 10 : 0,
                 ),
                 child: GestureDetector(
                   onTap: () {
@@ -34,11 +41,11 @@ class MakananList extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailList(
-                          imagePath: products[index]["image"]!,
-                          name: products[index]["name"]!,
-                          price: products[index]["price"]!,
-                          description: products[index]["deskripsi"]!,
-                          category: products[index]["category"]!,
+                          imagePath: filtered[index]["image"]!,
+                          name: filtered[index]["name"]!,
+                          price: filtered[index]["price"]!,
+                          description: filtered[index]["deskripsi"]!,
+                          category: filtered[index]["category"]!,
                         ),
                       ),
                     );
@@ -46,7 +53,7 @@ class MakananList extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      products[index]["image"]!,
+                      filtered[index]["image"]!,
                       width: 100,
                       fit: BoxFit.cover,
                     ),
@@ -76,10 +83,14 @@ class MakananList extends StatelessWidget {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: products.length,
+            itemCount: filtered.length,
             separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              final product = products[index];
+              final product = filtered[index];
+
+              // AMBIL INDEX ASLI
+              final originalIndex = products.indexOf(product);
+
               final qty = product["quantity"];
 
               return Padding(
@@ -122,7 +133,7 @@ class MakananList extends StatelessWidget {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      provider.decrement_makanan(index);
+                                      provider.decrement_makanan(originalIndex);
                                     },
                                     icon: const Icon(Icons.remove_circle_outline),
                                   ),
@@ -132,7 +143,7 @@ class MakananList extends StatelessWidget {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      provider.increment_makanan(index);
+                                      provider.increment_makanan(originalIndex);
                                     },
                                     icon: const Icon(Icons.add_circle_outline),
                                   ),
@@ -150,25 +161,6 @@ class MakananList extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
-
-          // 🔹 Tombol ke halaman Pesanan
-          // ElevatedButton.icon(
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => const PesananScreen(),
-          //       ),
-          //     );
-          //   },
-          //   icon: const Icon(Icons.shopping_cart),
-          //   label: const Text("Lihat Pesanan"),
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.green,
-          //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          //   ),
-          // ),
-          // const SizedBox(height: 20),
         ],
       ),
     );

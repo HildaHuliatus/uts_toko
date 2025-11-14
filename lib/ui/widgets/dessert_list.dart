@@ -4,14 +4,15 @@ import 'package:uts_toko/ui/provider/product_provider.dart';
 import 'package:uts_toko/ui/widgets/detail_list.dart';
 //import 'package:uts_toko/ui/screens/pesanan.dart'; 
 
-class MinumanList extends StatelessWidget {
+class DessertList extends StatelessWidget {
   final String keyword;
-  const MinumanList({super.key, required this.keyword});
+  const DessertList({super.key, required this.keyword});
+
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ProductProvider>();
-    final products = provider.minuman;
+    final products = provider.dessert;
 
     // FILTER LIST
     final filtered = products.where((item) {
@@ -22,7 +23,7 @@ class MinumanList extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // 🔹 LIST HORIZONTAL (PAKAI filtered)
+          // 🔹 LIST HORIZONTAL
           Container(
             height: 150,
             color: Colors.white,
@@ -79,7 +80,7 @@ class MinumanList extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // 🔹 LIST PRODUK VERTICAL (PAKAI filtered)
+          // 🔹 LIST PRODUK VERTICAL
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -87,8 +88,11 @@ class MinumanList extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final product = filtered[index];
+
+              // AMBIL INDEX ASLI
+              final originalIndex = products.indexOf(product);
+
               final qty = product["quantity"];
-              final originalIndex = products.indexOf(product); // penting untuk update
 
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -130,7 +134,7 @@ class MinumanList extends StatelessWidget {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      provider.decrement(originalIndex);
+                                      provider.decrement_dessert(originalIndex);
                                     },
                                     icon: const Icon(Icons.remove_circle_outline),
                                   ),
@@ -140,7 +144,7 @@ class MinumanList extends StatelessWidget {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      provider.increment(originalIndex);
+                                      provider.increment_dessert(originalIndex);
                                     },
                                     icon: const Icon(Icons.add_circle_outline),
                                   ),
@@ -158,6 +162,25 @@ class MinumanList extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
+
+          // 🔹 Tombol ke halaman Pesanan
+          // ElevatedButton.icon(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => const PesananScreen(),
+          //       ),
+          //     );
+          //   },
+          //   icon: const Icon(Icons.shopping_cart),
+          //   label: const Text("Lihat Pesanan"),
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Colors.green,
+          //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          //   ),
+          // ),
+          // const SizedBox(height: 20),
         ],
       ),
     );

@@ -14,6 +14,7 @@ class PesananScreen extends StatelessWidget {
     final allOrders = [
       ...provider.orderedMakanan,
       ...provider.orderedMinuman,
+      ...provider.orderedDessert,
     ];
 
     // 🔹 Hitung total harga semua pesanan
@@ -70,6 +71,9 @@ class PesananScreen extends StatelessWidget {
                       bool isMakanan =
                           provider.orderedMakanan.contains(item);
 
+                      bool isMinuman =
+                          provider.orderedMinuman.contains(item);
+
                       return ListTile(
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
@@ -99,9 +103,12 @@ class PesananScreen extends StatelessWidget {
                                     if (isMakanan) {
                                       final i = provider.makanan.indexOf(item);
                                       provider.decrement_makanan(i);
-                                    } else {
+                                    } else if(isMinuman) {
                                       final i = provider.minuman.indexOf(item);
                                       provider.decrement(i);
+                                    } else {
+                                      final i = provider.dessert.indexOf(item);
+                                      provider.decrement_dessert(i);
                                     }
                                   },
                                 ),
@@ -116,9 +123,12 @@ class PesananScreen extends StatelessWidget {
                                     if (isMakanan) {
                                       final i = provider.makanan.indexOf(item);
                                       provider.increment_makanan(i);
-                                    } else {
+                                    } else if(isMinuman){
                                       final i = provider.minuman.indexOf(item);
                                       provider.increment(i);
+                                    } else{
+                                      final i = provider.dessert.indexOf(item);
+                                      provider.increment_dessert(i);
                                     }
                                   },
                                 ),

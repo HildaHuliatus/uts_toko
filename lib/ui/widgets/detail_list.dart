@@ -24,8 +24,22 @@ class DetailList extends StatelessWidget {
     final provider = Provider.of<ProductProvider>(context);
 
     // 🔹 Pilih list berdasarkan kategori
-    final List<Map<String, dynamic>> productList =
-        category == "makanan" ? provider.makanan : provider.minuman;
+    late final List<Map<String, dynamic>> productList;
+
+    switch (category) {
+      case "makanan":
+        productList = provider.makanan;
+        break;
+      case "minuman":
+        productList = provider.minuman;
+        break;
+      case "dessert":
+        productList = provider.dessert;
+        break;
+      default:
+        productList = [];
+    }
+
 
     // 🔹 Cari produk di list yang sesuai
     final index = productList.indexWhere((p) => p["name"] == name);
@@ -119,8 +133,10 @@ class DetailList extends StatelessWidget {
                                   onPressed: () {
                                     if (category == "makanan") {
                                       provider.decrement_makanan(index);
-                                    } else {
+                                    } else if(category == "minuman") {
                                       provider.decrement(index);
+                                    } else {
+                                      provider.decrement_dessert(index);
                                     }
                                   },
                                 ),
@@ -135,8 +151,10 @@ class DetailList extends StatelessWidget {
                                   onPressed: () {
                                     if (category == "makanan") {
                                       provider.increment_makanan(index);
-                                    } else {
+                                    } else if(category == "minuman"){
                                       provider.increment(index);
+                                    } else {
+                                      provider.increment_dessert(index);
                                     }
                                   },
                                 ),
@@ -152,8 +170,10 @@ class DetailList extends StatelessWidget {
                                   if (product["quantity"] == 0) {
                                     if (category == "makanan") {
                                       provider.increment_makanan(index);
-                                    } else {
+                                    } else if (category == "minuman"){
                                       provider.increment(index);
+                                    } else{
+                                      provider.increment_dessert(index);
                                     }
                                   }
 

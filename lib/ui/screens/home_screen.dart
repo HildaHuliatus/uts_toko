@@ -1,17 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uts_toko/ui/provider/product_provider.dart';
+import 'package:uts_toko/ui/widgets/dessert_list.dart';
 import 'package:uts_toko/ui/widgets/minuman_list.dart';
 import 'package:uts_toko/ui/widgets/makanan_list.dart';
-// import 'package:movie/ui/widgets/baju_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
+
+  
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
+
+  TextEditingController searchController = TextEditingController();
+  String keyword = "";
+
+  void _autoSwitchCategory(String keyword) {
+    final lower = keyword.toLowerCase();
+
+    // Panggil provider
+    final provider = context.read<ProductProvider>();
+
+    // Cek kategori Minuman
+    bool matchMinuman = provider.minuman.any((item) =>
+        item["name"].toLowerCase().contains(lower) ||
+        item["deskripsi"].toLowerCase().contains(lower));
+
+    // Cek kategori Makanan
+    bool matchMakanan = provider.makanan.any((item) =>
+        item["name"].toLowerCase().contains(lower) ||
+        item["deskripsi"].toLowerCase().contains(lower));
+
+    // Cek kategori Dessert
+    bool matchDessert = provider.dessert.any((item) =>
+        item["name"].toLowerCase().contains(lower) ||
+        item["deskripsi"].toLowerCase().contains(lower));
+
+    // Jika keyword cocok kategori beda → pindah tab
+    if (matchMinuman && selectedIndex != 0) {
+      setState(() => selectedIndex = 0);
+    } else if (matchMakanan && selectedIndex != 1) {
+      setState(() => selectedIndex = 1);
+    } else if (matchDessert && selectedIndex != 2) {
+      setState(() => selectedIndex = 2);
+    }
+  }
+
 
   final List<String> textItems = [
     "Minuman",
@@ -22,11 +61,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSelectedList() {
     switch (selectedIndex) {
       case 0:
-        return const MinumanList(); // Makanan
+        return MinumanList(keyword: keyword); // Makanan
       case 1:
-        return const MakananList(); // Minuman
-      // case 2:
-      //   return const BajuList(); // Dessert
+        return MakananList(keyword: keyword); // Minuman
+      case 2:
+        return DessertList(keyword: keyword); // Dessert
       default:
         return const Center(
           child: Padding(
@@ -98,6 +137,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   child: TextField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        keyword = value.toLowerCase();
+                      });
+
+                      _autoSwitchCategory(value);
+                    },
                     decoration: InputDecoration(
                       hintText: "Search",
                       prefixIcon: const Icon(Icons.search, size: 20, color: Colors.grey),
@@ -105,47 +152,57 @@ class _HomeScreenState extends State<HomeScreen> {
                       contentPadding: const EdgeInsets.only(top: 12),
                     ),
                   ),
+
+
                 ),
-              ),
+              ),  
 
               Container(
                 height: 80,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: textItems.length,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 18),
-                      child: Column(
-                        children: [
-                          Text(
-                            textItems[index],
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: selectedIndex == index ? Colors.green : Colors.black,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double itemWidth = constraints.maxWidth / textItems.length;
+
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: textItems.length,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          width: itemWidth,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedIndex = index;
+                              });
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  textItems[index],
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: selectedIndex == index ? Colors.green : Colors.black,
+                                  ),
+                                ),
+                                if (selectedIndex == index)
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 4),
+                                    height: 3,
+                                    width: 35,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                          if (selectedIndex == index)
-                            Container(
-                              margin: const EdgeInsets.only(top: 4),
-                              height: 3,
-                              width: 35,
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  separatorBuilder: (context, index) => const SizedBox(width: 5),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
 

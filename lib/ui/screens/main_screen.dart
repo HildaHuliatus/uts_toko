@@ -49,7 +49,12 @@ class _MainScreenState extends State<MainScreen> {
       (sum, item) => sum + (item["quantity"] as int),
     );
 
-    int totalPesanan = totalMinuman + totalMakanan;
+    int totalDessert = provider.orderedDessert.fold<int>(
+      0,
+      (sum, item) => sum + (item["quantity"] as int),
+    );
+
+    int totalPesanan = totalMinuman + totalMakanan + totalDessert;
 
     return Scaffold(
       body: _screens.elementAt(_selectedIndex),
