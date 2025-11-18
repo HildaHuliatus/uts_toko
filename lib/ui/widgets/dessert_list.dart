@@ -66,17 +66,30 @@ class DessertList extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Text(
-                  'Pesan :',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          if (filtered.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                'Menu tidak tersedia',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
                 ),
-              ],
+              ),
+            )
+          else ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  Text(
+                    'Pesan :',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
-          ),
 
           const SizedBox(height: 10),
 
@@ -160,27 +173,11 @@ class DessertList extends StatelessWidget {
               );
             },
           ),
+          ],
 
           const SizedBox(height: 20),
 
-          // 🔹 Tombol ke halaman Pesanan
-          // ElevatedButton.icon(
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => const PesananScreen(),
-          //       ),
-          //     );
-          //   },
-          //   icon: const Icon(Icons.shopping_cart),
-          //   label: const Text("Lihat Pesanan"),
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.green,
-          //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          //   ),
-          // ),
-          // const SizedBox(height: 20),
+          
         ],
       ),
     );

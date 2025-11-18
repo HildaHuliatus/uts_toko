@@ -65,17 +65,30 @@ class MinumanList extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Text(
-                  'Pesan :',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          if (filtered.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                'Menu tidak tersedia',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
                 ),
-              ],
+              ),
+            )
+          else ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  Text(
+                    'Pesan :',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
-          ),
 
           const SizedBox(height: 10),
 
@@ -156,6 +169,7 @@ class MinumanList extends StatelessWidget {
               );
             },
           ),
+          ],
 
           const SizedBox(height: 20),
         ],
